@@ -1,29 +1,11 @@
--- ### Challenge #1: Customer View (Minimum Requirement)
-
--- 1. Create a MySQL Database called `bamazon`.
-
--- 2. Then create a Table inside of that database called `products`.
-
--- 3. The products table should have each of the following columns:
-
---    * item_id (unique id for each product)
-
---    * product_name (Name of product)
-
---    * department_name
-
---    * price (cost to customer)
-
---    * stock_quantity (how much of the product is available in stores)
-
--- 4. Populate this database with around 10 different products. 
--- (i.e. Insert "mock" data rows into this database and table).
+-- delet database if it already exists
 DROP DATABASE IF EXISTS bamazon_DB;
-
+-- create database
 CREATE DATABASE bamazon_DB;
-
+-- apply the code below to the bamazon_DB
 USE bamazon_DB;
 
+-- creating a table of products
 CREATE TABLE products (
   id INT NOT NULL AUTO_INCREMENT,
   product_name VARCHAR(45) NULL,
@@ -33,6 +15,7 @@ CREATE TABLE products (
   PRIMARY KEY (id)
 );
 
+-- inserting rows into the table 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("Harry Potter Series", "books", 75.50, 33), 
 ("selfie stick", "electronics", 35.00, 90), 
@@ -45,6 +28,8 @@ VALUES ("Harry Potter Series", "books", 75.50, 33),
 ("sunglass", "eyewear", 85.50, ),
 ("crocks", "footwear", 23.99, 12);
 
+
+-- selecting all of the rows in the products table
 SELECT*FROM products
 
 
