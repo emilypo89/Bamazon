@@ -34,8 +34,8 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
-  // selectAllItems();
-  queryStockQuantity();
+  selectAllItems();
+  // queryStockQuantity();
 });
 
 function selectAllItems() {
@@ -58,19 +58,33 @@ function selectAllItems() {
 		    inquirer.prompt([
 				  {
 				    type: "input",
-				    message: "How many untils would you like to buy?",
+				    message: "How many units would you like to buy?",
 				    name: "amount"
 				  }
 				]).then(function(purchase) {
+					var productSearchById = product.id;
+					// console.log(productSearchById);
 				  // checking the user input to the correct answer
-				  console.log(purchase.amount);
+				  // console.log(purchase.amount);
 				  // need to get this so that it will select the stock quantity by the id and then check that quantity
 				 // if the quantity is greater than zero then 
-				  connection.query("SELECT * FROM products WHERE ID=?", [product.id], function(err, res) {
+				  connection.query("SELECT * FROM products WHERE ID=?", [productSearchById], function(err, res) {
 				    for (var i = 0; i < res.length; i++) {
 				      console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " 
 				      	+ res[i].price + " | " + res[i].stock_quantity);
+				      	if (res[i].stock_quantity > 0) {
+						    	console.log("We have that in stock!");
+						    	var newQuantity = (res[i].stock_quantity - purchase.amount);
+						    	console.log(newQuantity);
+						    	updateStockQuantity(newQuantity, productSearchById);
+						    	console.log("You will be charged $" + res[i].price + ".\n Thank you for shopping at Bamazon!");
+						    }
+						    else{
+						    	console.log("I'm sorry that item is out of stock!");
+						    	// send back to the beginning
+						    }
 				    }
+
 				  });
 
 				  
@@ -78,29 +92,23 @@ function selectAllItems() {
 		});
 	});
 }
+function updateStockQuantity(newQuantity, productSearchById) {
+  connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [
+      {
+        stock_quantity: newQuantity
+      },
+      {
+        id: productSearchById
+      }
+    ],
+    function(err, res) {
+    	if (err) throw err;
+      // console.log(res.affectedRows + " products updated!\n");
+ 
+    }
+  );
+}
 
 
-
-// if (purchase.amount < res.price) {
-// 				    console.log("Your bid is not high enough! Try again!");
-// 				  	// send back to first screen
-// 				  }
-// 				  else {
-				  	
-// 				  	console.log("You are the highest bidder!");
-// 				    connection.query(
-// 					    "UPDATE products SET ? WHERE ?",
-// 					    [
-// 					      {
-// 					        price: bid.value
-// 					      },
-// 					      {
-// 					        name: user.item
-// 					      }
-// 					    ],
-// 					    function(err, res) {
-// 					    	if (err) throw err;
-// 					      console.log(res.affectedRows + " bid updated!\n");
-// 					    }
-// 					  );
-// 				  }
