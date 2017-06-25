@@ -49,7 +49,7 @@ function selectAllItems() {
     inquirer.prompt([
 		  {
 		    type: "input",
-		    message: "Type ID# item would you like to bid on?",
+		    message: "Type ID# for the item would you like to bid on?",
 		    name: "id"
 		  }
 		]).then(function(product) {
