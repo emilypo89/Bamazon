@@ -31,6 +31,7 @@ function startOrQuit(){
 		}).then(function(response){
 			if (response.action == "Purchase an Item"){
 				purchaseItem();
+				console.log("-------------------------------------");
 			}
 			else {
 				connection.destroy();
@@ -46,16 +47,19 @@ function purchaseItem() {
 		for (var i = 0; i < res.length; i++) {
       console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " 
       	+ res[i].price + " | " + res[i].stock_quantity);
+      
     }
+    console.log("-------------------------------------");
     // prompting the user to choose an item
     inquirer.prompt([
 		  {
 		    type: "input",
-		    message: "Type ID# for the item would you like to bid on?",
+		    message: "Type ID# for the item would you like to buy?",
 		    name: "id"
 		  }
 		]).then(function(product) {
-				console.log(product.id);
+				// console.log(product.id);
+				console.log("-------------------------------------");
 				// prompting the user for how many of that item they would like to purchase
 		    inquirer.prompt([
 				  {
@@ -64,21 +68,22 @@ function purchaseItem() {
 				    name: "amount"
 				  }
 				]).then(function(purchase) {
+					console.log("-------------------------------------");
 					var productSearchById = product.id;
 				  //selecting the stock quantity by the id and then check that quantity
 				 	connection.query("SELECT * FROM products WHERE ID=?", [productSearchById], function(err, res) {
 				    for (var i = 0; i < res.length; i++) {
 				    	// console logging the item chosen
 				      console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " 
-				      	+ res[i].price + " | " + res[i].stock_quantity);
+				      	+ res[i].price + " | ");
 				      // if the stock_quantity is greater than 0 then let the person purchase the item
 				      // then send back to beginning
 				      	if (res[i].stock_quantity > 0) {
 						    	console.log("We have that in stock!");
 						    	var newQuantity = (res[i].stock_quantity - purchase.amount);
-						    	console.log(newQuantity);
+						    	// console.log(newQuantity);
 						    	updateStockQuantity(newQuantity, productSearchById);
-						    	console.log("You will be charged $" + res[i].price + ".\n Thank you for shopping at Bamazon!");
+						    	console.log("You will be charged $" + (parseFloat(res[i].price) * parseFloat(purchase.amount)) + ".\n Thank you for shopping at Bamazon!");
 						    	console.log("------------------------------------");
 						    	console.log("------------------------------------");
 						    	startOrQuit();
@@ -92,10 +97,7 @@ function purchaseItem() {
 						    	startOrQuit();
 						    }
 				    }
-
 				  });
-
-				  
 				});
 		});
 	});
@@ -116,7 +118,8 @@ function updateStockQuantity(newQuantity, productSearchById) {
       // console.log(res.affectedRows + " products updated!\n");
  
     }
-  });
+  );
 }
 
-
+module.exports = startOrQuit;
+module.exports = purchaseItem;

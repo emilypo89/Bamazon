@@ -21,7 +21,7 @@ connection.connect(function(err) {
 
 });
 // prompts the user user for what they would like to do
-function runSearch(){
+var runSearch = function (){
 	inquirer.prompt({
 		name: "action",
 		type: "list",
@@ -52,7 +52,7 @@ function runSearch(){
 				connection.destroy();
 				break;	
 		}
-	})
+	});
 }
 // asks the user what else they would like to do
 // if yes - shown the main menu options / if no - program ends
@@ -82,7 +82,8 @@ function productsForSale() {
 		for (var i = 0; i < res.length; i++) {
       console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " 
       	+ res[i].price + " | " + res[i].stock_quantity);
-    }			
+    }
+    console.log("-------------------------------------");			
     restartOrQuit();
 	});
 }
@@ -102,6 +103,7 @@ function lowInventory(){
 	      	+ res[i].price + " | " + res[i].stock_quantity);
 					}
 				}
+	console.log("-------------------------------------");			
 	restartOrQuit();			
 	});
 }
@@ -143,6 +145,7 @@ function addInventory(){
     	+ res[i].price + " | " + newQuantity);
 	    ; 	
 	    }
+	   console.log("-------------------------------------");
 	   restartOrQuit(); 
 	  }); 	
 	});
@@ -183,9 +186,10 @@ function addNewProduct() {
 			    function(err, res) {
 			    	if (err) throw err;
 			      console.log(res.affectedRows + " product inserted!\n");
-			    // }
+			    console.log("-------------------------------------");
 			    restartOrQuit();
 			  });
 		});
 } 
 
+module.exports = runSearch;
