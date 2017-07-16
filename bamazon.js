@@ -36,7 +36,6 @@ function runProgram() {
     ]
     // runs each function based on the users choice
   }).then(function(answer){
-    debugger
     switch(answer.action){
       case "Customer":
         startOrQuit();
